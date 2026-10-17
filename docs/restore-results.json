@@ -1,0 +1,14 @@
+{
+  "result": "passed",
+  "metadata_and_vault": "offline backup into new directory",
+  "graph": "real FalkorDB SAVE + Docker service restart; persisted evidence retrieved",
+  "checks": [
+    "owner login",
+    "workspace and dataset versions",
+    "scenario and audit",
+    "authenticated ZIP digest",
+    "Cypher evidence retrieval",
+    "workspace deletion"
+  ],
+  "key": "original operator key supplied through environment; never included in backup archive"
+}

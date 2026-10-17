@@ -8,7 +8,7 @@ QUERY_DIR=Path(__file__).resolve().parents[2]/'queries'
 class Graph:
     def __init__(self,wid,sid):
         self.wid=wid;self.sid=sid
-        self.db=FalkorDB(host=os.getenv('MOSAIC_GRAPH_HOST','localhost'),port=int(os.getenv('MOSAIC_GRAPH_PORT','6381')),
+        self.db=FalkorDB(host=os.getenv('MOSAIC_GRAPH_HOST','127.0.0.1'),port=int(os.getenv('MOSAIC_GRAPH_PORT','6397')),
                         password=os.getenv('MOSAIC_GRAPH_PASSWORD') or None,socket_timeout=12,socket_connect_timeout=3)
         self.g=self.db.select_graph('mg_'+wid+'_'+sid)
     def query(self,text,params=None):
@@ -33,7 +33,7 @@ class Graph:
         last='t'+str(len(path)-1)
         text=(QUERY_DIR/'candidates.cypher').read_text().replace('__PATTERN__',pattern).replace('__END__',last)
         return self.query(text,params)
-    def finding(self,fid,summary): self.template('finding.cypher',{'fid':fid,'summary':summary})
+    def finding(self,fid,summary,rules): self.template('finding.cypher',{'fid':fid,'summary':summary,'rules':rules})
     def evidence(self,fid): return self.template('evidence.cypher',{'fid':fid})
     def delete(self):
         try: self.g.delete()

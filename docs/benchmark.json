@@ -1,0 +1,60 @@
+{
+  "files": 5,
+  "rows_per_file": 1000,
+  "workspace_rows": 5000,
+  "file_bytes": [
+    37544,
+    18025,
+    21528,
+    20023,
+    23028
+  ],
+  "max_depth": 3,
+  "rule_count": 6,
+  "query_timeout_ms": 8000,
+  "max_path_endpoint_results": 20000,
+  "max_paths": 100,
+  "audit_seconds": 2.563,
+  "import_and_audit_seconds": 5.425,
+  "peak_traced_python_bytes": 12855974,
+  "memory_scope": "Python tracemalloc only; excludes native allocations and FalkorDB process.",
+  "status": "complete within scope",
+  "summary": {
+    "assessed_path_records": 6000,
+    "candidate_rows": 1000,
+    "coverage_notes": 0,
+    "direct_identifier_columns": 0,
+    "historical_single_candidate_path_records": 0,
+    "single_candidate_denominator": "Sum of assessed source record/path pairs; records may occur on multiple paths.",
+    "single_candidate_path_records": 2000,
+    "unassessed_path_records": 0
+  },
+  "runtime": "3.14.0",
+  "graph": "real FalkorDB Docker image pinned in compose.yaml",
+  "synthetic_evaluation": [
+    {
+      "path": "attendance",
+      "true_candidate_pairs": 1000,
+      "candidate_pairs": 5000,
+      "fixture_precision": 0.2,
+      "fixture_recall": 1.0,
+      "interpretation": "Known fictional generator truth only; not real-world re-identification accuracy."
+    },
+    {
+      "path": "badge",
+      "true_candidate_pairs": 1000,
+      "candidate_pairs": 1000,
+      "fixture_precision": 1.0,
+      "fixture_recall": 1.0,
+      "interpretation": "Known fictional generator truth only; not real-world re-identification accuracy."
+    },
+    {
+      "path": "calendar",
+      "true_candidate_pairs": 1000,
+      "candidate_pairs": 3400,
+      "fixture_precision": 0.29411764705882354,
+      "fixture_recall": 1.0,
+      "interpretation": "Known fictional generator truth only; not real-world re-identification accuracy."
+    }
+  ]
+}

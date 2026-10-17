@@ -12,7 +12,9 @@ def canonical(value, column, rule):
     if not value: return None
     if rule.get('unicode_nfc'): value=unicodedata.normalize('NFC',value)
     if rule.get('casefold'): value=value.casefold()
-    if column['type']=='number' and not column.get('generalization'): return ['number',str(Decimal(value).normalize())]
+    if column['type']=='number' and not column.get('generalization'):
+        number=Decimal(value)
+        return ['number','0' if number==0 else str(number.normalize())]
     if column['type']=='date' and not column.get('generalization'):
         return ['date',datetime.strptime(value,column['date_format']).date().isoformat()]
     return ['text',value]
@@ -51,7 +53,8 @@ def compatible(va,ca,vb,cb,rule):
     if ca.get('generalization') or cb.get('generalization'):
         if rule['predicate']!='compatible': raise ValueError('Generalised exact field requires a confirmed typed-compatible rule.')
         return overlap(interval(va,ca),interval(vb,cb))
-    return canonical(va,ca,rule)==canonical(vb,cb,rule)
+    a=canonical(va,ca,rule);b=canonical(vb,cb,rule)
+    return a is not None and b is not None and a==b
 
 def bindings(wid,rule,a,b,comparison_limit=250000):
     """Return key bindings, never an independent persistent linkage graph.
@@ -73,8 +76,8 @@ def bindings(wid,rule,a,b,comparison_limit=250000):
             if v is None: return None
             vals.append(v)
         return token(wid,rule['id'],vals)
-    complete_a=[i for i,row in enumerate(a['rows']) if all(row[p[0][0]] is not None for p in pairs)]
-    complete_b=[i for i,row in enumerate(b['rows']) if all(row[p[1][0]] is not None for p in pairs)]
+    complete_a=[i for i,row in enumerate(a['rows']) if all(canonical(row[p[0][0]],p[0][1],rule) is not None for p in pairs)]
+    complete_b=[i for i,row in enumerate(b['rows']) if all(canonical(row[p[1][0]],p[1][1],rule) is not None for p in pairs)]
     left=[];right=[];fanout=0;maximum=0;missing=len(a['rows'])-len(complete_a)
     if not typed:
         groups=defaultdict(list)
@@ -119,5 +122,5 @@ def rule_paths(scenario):
             if len(paths)>=100: truncated=True;return
             paths.append(path)
             visit(rule['target'],path,seen|{rule['target']})
-    for source in scenario['candidates']: visit(source,[],{source})
+    for source in dict.fromkeys(scenario['candidates']+scenario.get('historical',[])): visit(source,[],{source})
     return paths,truncated

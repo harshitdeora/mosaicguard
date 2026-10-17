@@ -16,4 +16,20 @@
 
 ## Evidence
 - 2026-10-17: inspected empty workspace; Python 3.14, Node 22.19, Git 2.51 and Docker Engine 29.2 available. GitHub connector identifies harshitdeora.
-- Implementation and verification ongoing. No completion claim yet.
+- Created private GitHub repository `harshitdeora/mosaicguard`; initial architecture committed and pushed.
+- Implemented encrypted metadata/vault, Argon2 owner authentication, protected cookies/CSRF, login throttling and one-process lease.
+- Implemented reviewed arbitrary CSV import, immutable versions, roles, typed mappings, scoped scenario snapshots and real parameterised FalkorDB projections.
+- Implemented bounded exact/composite/interval candidate sets, independent paths, explicit knowledge bundles, within-file diagnostics, history and release-addition comparisons.
+- Implemented declarative repair branches, complete eligible re-audits, utility drift/retention comparisons, content-bound reproducible ZIPs, formula transport verification and local release records.
+- Added serialized durable jobs, cooperative cancellation/retry, interruption recovery, atomic metadata/result publication and deletion tombstones.
+- Added guided React UI, local rules-based guidance and optional consent-controlled read-only OpenAI adapter. Live model mode is unverified (no key configured).
+- Real graph correctness/security/recovery suite: 37 passed. Expanded Edge browser acceptance: passed, including unfamiliar semicolon CSVs, an added export, stale-result blocking, comparison, two repairs, independent package reopening, refresh, 390px layout, unauthorised request and deletion.
+- Five-file benchmark: 5,000 imported records; audit 2.563s, import/audit/evaluation 5.425s, peak traced Python allocations 12,855,974 bytes. Detailed envelope and fictional candidate-pair evaluation in `docs/benchmark.json`.
+- Backup/restore smoke: passed after real graph SAVE/restart, fresh metadata/vault restore, login/evidence/ZIP digest checks and cleanup.
+- Production TypeScript/Vite build passed. Frontend dependency audit: zero vulnerabilities after Vite/esbuild updates.
+- Docker production image built; final rebuild/health check and final Git synchronization pending below.
+
+## Exact scope notes
+- The standard arbitrary single-candidate import-to-reviewed-export workflow is implemented and verified without an LLM key.
+- Advanced knowledge-bundle controls are available; normal paths remain separate. Subject/time/cohort statements are operator assumptions, not automatic factual validation.
+- Additional selected-cell/composite suppression policies, richer multiple-candidate analytical UI, exhaustive optimization, broad fault injection, full accessibility/security audits and public TLS deployment are not completed. See `docs/LIMITATIONS.md`; these are not claimed as finished.

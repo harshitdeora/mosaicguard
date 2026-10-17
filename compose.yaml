@@ -1,0 +1,40 @@
+name: mosaicguard
+services:
+  graph:
+    image: falkordb/falkordb@sha256:b0bdcac2cbaff989e77cb0610439b7a9289e86de033ccbbd4368b66fb680ae7a
+    restart: unless-stopped
+    environment:
+      REDIS_ARGS: "--requirepass ${MOSAIC_GRAPH_PASSWORD:?Run scripts/configure.py} --appendonly yes --save 60 1"
+      MOSAIC_GRAPH_PASSWORD: "${MOSAIC_GRAPH_PASSWORD}"
+    ports:
+      - "127.0.0.1:6397:6379"
+    volumes:
+      - graph-data:/var/lib/falkordb/data
+    healthcheck:
+      test: ["CMD-SHELL", "REDISCLI_AUTH=$$MOSAIC_GRAPH_PASSWORD redis-cli ping | grep PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+  app:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      MOSAIC_GRAPH_HOST: graph
+      MOSAIC_GRAPH_PORT: "6379"
+      MOSAIC_DATA: /data
+    ports:
+      - "127.0.0.1:8027:8000"
+    volumes:
+      - app-data:/data
+    depends_on:
+      graph:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health')"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+volumes:
+  app-data:
+  graph-data:

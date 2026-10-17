@@ -7,5 +7,6 @@ data/
 dist/
 playwright-report/
 test-results/
+work/
 *.pyc
 *.log
