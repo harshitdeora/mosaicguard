@@ -3,7 +3,7 @@ from pydantic import Field
 from .ingestion import Strict
 
 class Rule(Strict):
-    id: str
+    id: str=Field(pattern=r'^[0-9a-f]{32}$')
     source: str
     target: str
     source_columns: list[str]=Field(min_length=1,max_length=5)

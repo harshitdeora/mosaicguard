@@ -51,6 +51,7 @@ async function api(path: string, method = "GET", body?: any) {
   const data = await r
     .json()
     .catch(() => ({ detail: "The service returned an unexpected response." }));
+  if (r.status === 401) window.dispatchEvent(new Event("mosaic-session-expired"));
   if (!r.ok) throw new Error(data.detail || "Request failed.");
   return data;
 }
@@ -171,6 +172,11 @@ function App() {
       setBusy(false);
     }
   }
+  useEffect(() => {
+    const expired = () => { csrf = ""; setAuth(false); setState(null); };
+    window.addEventListener("mosaic-session-expired", expired);
+    return () => window.removeEventListener("mosaic-session-expired", expired);
+  }, []);
   useEffect(() => {
     (async () => {
       try {

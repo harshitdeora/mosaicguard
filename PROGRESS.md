@@ -27,7 +27,8 @@
 - Five-file benchmark: 5,000 imported records; audit 2.563s, import/audit/evaluation 5.425s, peak traced Python allocations 12,855,974 bytes. Detailed envelope and fictional candidate-pair evaluation in `docs/benchmark.json`.
 - Backup/restore smoke: passed after real graph SAVE/restart, fresh metadata/vault restore, login/evidence/ZIP digest checks and cleanup.
 - Production TypeScript/Vite build passed. Frontend dependency audit: zero vulnerabilities after Vite/esbuild updates.
-- Docker production image built; final rebuild/health check and final Git synchronization pending below.
+- Final Docker production image rebuilt; app and FalkorDB are healthy on localhost 8027/6397. The first-run owner flow is intentionally untouched for the operator.
+- Linux CI's first run passed backend checks and the production frontend build, then exposed a missing CI virtualenv in the browser-server command. The workflow now creates the same `.venv` layout used by local instructions; a new CI run will verify the correction.
 
 ## Exact scope notes
 - The standard arbitrary single-candidate import-to-reviewed-export workflow is implemented and verified without an LLM key.
