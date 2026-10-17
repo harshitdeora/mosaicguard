@@ -64,6 +64,7 @@ class Transform(Strict):
     kind: Literal['drop','suppress','numeric_bucket','date_month','date_quarter','date_year','rare_suppress']
     width: float=Field(default=10,gt=0,le=1000000000)
     rare_threshold: int=Field(default=5,ge=2,le=100)
+    combination_columns: list[str]=Field(default_factory=list,max_length=5)
 
 class Repair(Strict):
     scenario: str

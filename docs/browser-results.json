@@ -65,6 +65,48 @@
   },
   "suites": [
     {
+      "title": "boundaries.spec.ts",
+      "file": "boundaries.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "invalid input, multiple candidate analytics, incomplete scope and failed repair remain explicit",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 14456,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-17T10:24:08.885Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a0a85330a59013ae9a19-fef8dc3644bcbb34313e",
+          "file": "boundaries.spec.ts",
+          "line": 3,
+          "column": 1
+        }
+      ]
+    },
+    {
       "title": "journey.spec.ts",
       "file": "journey.spec.ts",
       "column": 0,
@@ -86,12 +128,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 25045,
+                  "duration": 24361,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-17T10:18:26.733Z",
+                  "startTime": "2026-10-17T10:24:23.630Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -109,9 +151,9 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-10-17T10:18:24.692Z",
-    "duration": 27775.119,
-    "expected": 1,
+    "startTime": "2026-10-17T10:24:06.769Z",
+    "duration": 41715.305,
+    "expected": 2,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

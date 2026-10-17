@@ -17,10 +17,14 @@ def transform(data,recipe,protected):
             out['columns'].pop(idx)
             for row in out['rows']: row.pop(idx)
         elif t['kind'] in ('suppress','rare_suppress'):
-            freq=Counter(row[idx] for row in out['rows'])
+            combination=t.get('combination_columns') or [t['column']]
+            lookup={c['id']:i for i,c in enumerate(out['columns'])}
+            if any(c not in lookup for c in combination):raise ValueError('Rare-combination fields must remain available at this recipe step.')
+            keys=[tuple(row[lookup[c]] for c in combination) for row in out['rows']]
+            freq=Counter(k for k in keys if None not in k)
             count=0
-            for row in out['rows']:
-                if t['kind']=='suppress' or freq[row[idx]]<t['rare_threshold']:
+            for row,k in zip(out['rows'],keys):
+                if t['kind']=='suppress' or (None not in k and freq[k]<t['rare_threshold']):
                     count+=row[idx] is not None;row[idx]=None
             notes.append({'column':t['column'],'suppressed_cells':count})
         elif t['kind']=='numeric_bucket':

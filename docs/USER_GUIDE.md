@@ -18,7 +18,7 @@ Select candidate and audience-available versions, purpose and audience. Choose e
 
 Use typed-compatible predicates for reviewed date/number fields that may be generalised. Mapping confirmation never follows merely from equal header spelling. Optional normalisation is explicit. Independent mappings remain alternative paths. If identity keys are unresolved, leave the anchor unset and read candidate cardinalities as reference-record counts.
 
-Select quasi-identifier diagnostics, marked sensitive fields, useful counts or numeric statistics, protected columns, minimum retention and acceptable drift. Save the immutable snapshot. **Revise this scope** copies an existing review into a new editable draft; saving it creates a new revision and makes older results stale for new export.
+Select quasi-identifier diagnostics, marked sensitive fields, useful counts or numeric statistics, protected columns, minimum retention and acceptable drift. For multiple candidates, use **Candidate for analytical controls** to configure each version; definitions remain scoped to their selected dataset. Save the immutable snapshot. **Revise this scope** copies an existing review into a new editable draft; saving it creates a new revision and makes older results stale for new export.
 
 ## Read an audit
 
@@ -26,7 +26,7 @@ Expand a finding for its explanation before the compact evidence chain. Inspect 
 
 ## Compare repairs
 
-Test two or more recipes. Column removal can block one path while another remains. Suppression loses linkage assessment coverage; that is shown in the denominators. Typed generalisation can widen possible matches, so assess candidate counts and utility independently. Protected columns cannot change. A dropped analytical field makes its metric unavailable/violated. Rejected branches can be deleted; they are never applied to the original.
+Test two or more recipes. Column removal can block one path while another remains. Suppression loses linkage assessment coverage; that is shown in the denominators. Rare-combination suppression counts complete combinations of selected columns and suppresses only the chosen target column for combinations below the threshold; missing combinations remain unassessed. Typed generalisation can widen possible matches, so assess candidate counts and utility independently. Protected columns cannot change. A dropped analytical field makes its metric unavailable/violated. Rejected branches can be deleted; they are never applied to the original.
 
 The comparison cards show actual re-audit counts, assessed/unassessed records, retention, missingness and each requested statistic's before/after values and drift. They do not combine these into one privacy score. A branch failing analytical requirements needs explicit conflict acceptance to export.
 

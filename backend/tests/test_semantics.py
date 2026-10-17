@@ -79,3 +79,9 @@ def test_case_unicode_and_large_ids_preserved():
     c={'type':'text'};assert canonical('00000000000000001234',c,{})==['text','00000000000000001234']
     assert canonical('É',c,{})!=canonical('E',c,{})
     assert canonical('É',c,{'casefold':True,'unicode_nfc':True})==canonical('e\u0301',c,{'casefold':True,'unicode_nfc':True})
+
+def test_rare_combinations_suppress_only_declared_cells():
+    d=data(['region','cohort','score'],[['A','X','2'],['A','X','3'],['A','Y','4'],['B',None,'5']],{'score':'number'})
+    out,notes=transform(d,[{'column':'region','kind':'rare_suppress','rare_threshold':2,'combination_columns':['region','cohort']}],[])
+    assert out['rows']==[['A','X','2'],['A','X','3'],[None,'Y','4'],['B',None,'5']]
+    assert notes[0]['suppressed_cells']==1 and d['rows'][2][0]=='A'

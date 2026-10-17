@@ -339,6 +339,7 @@ def repair(wid,body:Repair,request:Request,s=Depends(session)):
             if t.dataset not in base['candidates']:fail('Only current candidate versions can be repaired; reference data remains unchanged.')
             if t.column in base['protected']:fail('A protected analytical column cannot be changed.')
             if t.column not in {c['id'] for c in get(t.dataset,'dataset',wid)['columns']}:fail('Repair column is unavailable.')
+            if any(cid not in {c['id'] for c in get(t.dataset,'dataset',wid)['columns']} for cid in t.combination_columns):fail('Rare-combination column is unavailable.')
         return {'job':enqueue(wid,'repair',body.model_dump(),request.headers.get('idempotency-key') or uid())}
 
 @app.get('/api/w/{wid}/jobs/{jid}')

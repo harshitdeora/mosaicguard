@@ -51,7 +51,8 @@ async function api(path: string, method = "GET", body?: any) {
   const data = await r
     .json()
     .catch(() => ({ detail: "The service returned an unexpected response." }));
-  if (r.status === 401) window.dispatchEvent(new Event("mosaic-session-expired"));
+  if (r.status === 401)
+    window.dispatchEvent(new Event("mosaic-session-expired"));
   if (!r.ok) throw new Error(data.detail || "Request failed.");
   return data;
 }
@@ -173,7 +174,11 @@ function App() {
     }
   }
   useEffect(() => {
-    const expired = () => { csrf = ""; setAuth(false); setState(null); };
+    const expired = () => {
+      csrf = "";
+      setAuth(false);
+      setState(null);
+    };
     window.addEventListener("mosaic-session-expired", expired);
     return () => window.removeEventListener("mosaic-session-expired", expired);
   }, []);
@@ -1664,7 +1669,7 @@ function Scenarios({
     [candidates, setCandidates] = useState<string[]>([]),
     [available, setAvailable] = useState<string[]>([]),
     [rules, setRules] = useState<O[]>([]),
-    [qi, setQi] = useState<string[]>([]),
+    [qiByDataset, setQiByDataset] = useState<Record<string, string[]>>({}),
     [protectedCols, setProtected] = useState<string[]>([]),
     [utility, setUtility] = useState<O[]>([]),
     [anchor, setAnchor] = useState(""),
@@ -1702,7 +1707,11 @@ function Scenarios({
     [uVal, setUVal] = useState(""),
     [uDrift, setUDrift] = useState(0.1),
     [minRetention, setMinRetention] = useState(1);
-  const candidate = ds.find((d: O) => d.id === candidates[0]);
+  const [analysisDid, setAnalysisDid] = useState("");
+  const candidate = ds.find(
+    (d: O) =>
+      d.id === (candidates.includes(analysisDid) ? analysisDid : candidates[0]),
+  );
   const eligible = ds.filter((d: O) =>
     [...candidates, ...available].includes(d.id),
   );
@@ -1793,7 +1802,7 @@ function Scenarios({
                 value={candidates}
                 onChange={(v) => {
                   setCandidates(v);
-                  setQi([]);
+                  setQiByDataset({});
                   setUtility([]);
                   setProtected([]);
                 }}
@@ -2090,6 +2099,24 @@ function Scenarios({
           </section>
           <section className="panel">
             <h2>3. Define diagnostics and analytical requirements</h2>
+            {candidates.length > 1 && (
+              <Field label="Candidate for analytical controls">
+                <select
+                  value={candidate?.id || ""}
+                  onChange={(e) => {
+                    setAnalysisDid(e.target.value);
+                    setUGroup("");
+                    setUVal("");
+                  }}
+                >
+                  {candidates.map((id) => (
+                    <option key={id} value={id}>
+                      {ds.find((d: O) => d.id === id)?.name}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+            )}
             {candidate ? (
               <>
                 <Multi
@@ -2098,14 +2125,23 @@ function Scenarios({
                     candidate.name
                   }
                   options={candidate.columns}
-                  value={qi}
-                  onChange={setQi}
+                  value={qiByDataset[candidate.id] || []}
+                  onChange={(v) =>
+                    setQiByDataset({ ...qiByDataset, [candidate.id]: v })
+                  }
                 />
                 <Multi
                   label="Protected columns (cannot be transformed or removed)"
                   options={candidate.columns}
                   value={protectedCols}
-                  onChange={setProtected}
+                  onChange={(v) =>
+                    setProtected([
+                      ...protectedCols.filter(
+                        (id) => !candidate.columns.some((c: O) => c.id === id),
+                      ),
+                      ...v,
+                    ])
+                  }
                 />
                 <div className="form-grid">
                   <Field label="Analytical goal">
@@ -2195,8 +2231,10 @@ function Scenarios({
                   <div className="rule-row" key={i}>
                     <strong>
                       {u.operation} by{" "}
-                      {candidate.columns.find((c: O) => c.id === u.group)
-                        ?.name || "all records"}{" "}
+                      {ds
+                        .find((d: O) => d.id === u.dataset)
+                        ?.columns.find((c: O) => c.id === u.group)?.name ||
+                        "all records"}{" "}
                       · max drift {u.max_relative_drift}
                     </strong>
                     <button
@@ -2340,9 +2378,12 @@ function Scenarios({
                             },
                           ]
                         : [],
-                      quasi_identifiers: qi.length
-                        ? [{ dataset: candidates[0], columns: qi }]
-                        : [],
+                      quasi_identifiers: Object.entries(qiByDataset)
+                        .filter(
+                          ([did, cols]) =>
+                            candidates.includes(did) && cols.length,
+                        )
+                        .map(([dataset, columns]) => ({ dataset, columns })),
                       utility,
                       protected: protectedCols,
                       min_retention: minRetention,
@@ -2408,7 +2449,12 @@ function Scenarios({
                   setCandidates(s.candidates);
                   setAvailable(s.available);
                   setRules(s.rules.filter((r: O) => !r._historical));
-                  setQi(s.quasi_identifiers[0]?.columns || []);
+                  setQiByDataset(
+                    Object.fromEntries(
+                      s.quasi_identifiers.map((q: O) => [q.dataset, q.columns]),
+                    ),
+                  );
+                  setAnalysisDid(s.candidates[0]);
                   setProtected(s.protected);
                   setUtility(s.utility);
                   setThreshold(s.threshold);
@@ -2901,7 +2947,8 @@ function Repairs({
     [kind, setKind] = useState("drop"),
     [width, setWidth] = useState(10),
     [name, setName] = useState("Repair option"),
-    [recipe, setRecipe] = useState<O[]>([]);
+    [recipe, setRecipe] = useState<O[]>([]),
+    [combinationCols, setCombinationCols] = useState<string[]>([]);
   const scenario = eligible.find((s: O) => s.id === sid) || eligible.at(-1),
     candidate = state.datasets.find(
       (d: O) => d.id === (did || scenario?.candidates[0]),
@@ -2932,6 +2979,7 @@ function Repairs({
                   onChange={(e) => {
                     setSid(e.target.value);
                     setDid("");
+                    setCombinationCols([]);
                     setCid("");
                     setRecipe([]);
                   }}
@@ -2955,6 +3003,7 @@ function Repairs({
                   value={candidate?.id || ""}
                   onChange={(e) => {
                     setDid(e.target.value);
+                    setCombinationCols([]);
                     setCid("");
                   }}
                 >
@@ -2987,7 +3036,7 @@ function Repairs({
                     Suppress selected column values
                   </option>
                   <option value="rare_suppress">
-                    Suppress rare values in column
+                    Suppress rare combinations
                   </option>
                   <option value="numeric_bucket">Numeric intervals</option>
                   <option value="date_month">Dates to month intervals</option>
@@ -3009,6 +3058,14 @@ function Repairs({
                 </Field>
               )}
             </div>
+            {kind === "rare_suppress" && candidate && (
+              <Multi
+                label="Rare-combination fields (optional; default is the selected column)"
+                options={candidate.columns}
+                value={combinationCols}
+                onChange={setCombinationCols}
+              />
+            )}
             <button
               className="secondary"
               disabled={!cid || !candidate}
@@ -3021,6 +3078,8 @@ function Repairs({
                     kind,
                     width,
                     rare_threshold: scenario.threshold,
+                    combination_columns:
+                      kind === "rare_suppress" ? combinationCols : [],
                   },
                 ]);
                 setCid("");

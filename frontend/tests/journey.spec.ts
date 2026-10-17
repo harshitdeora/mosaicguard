@@ -200,22 +200,69 @@ test("unfamiliar CSV: review, scenario, real audit, repairs, export, resume and 
     fullPage: true,
   });
   // Add a genuinely new audience-available export through the same browser import review.
-  await page.getByRole('button',{name:'Datasets',exact:true}).click();
-  await importCSV('audience-extra.csv','occurred;code\r\n2026-05-12;0001\r\n2026-05-13;0002\r\n','available',['occurred']);
-  await page.getByRole('button',{name:'Audits & findings',exact:true}).click();
-  await expect(page.getByRole('button',{name:'Run audit',exact:true})).toBeDisabled();
-  await page.getByRole('button',{name:'Release scenarios',exact:true}).click();
-  await page.getByRole('button',{name:'Revise this scope',exact:true}).first().click();
-  await page.getByRole('group',{name:'Information available to this audience',exact:true}).getByLabel('audience-extra.csv').check();
-  await addRule('observations-unfamiliar.csv','audience-extra.csv','occurred','occurred','Reviewed same participation day in the additional fictional export');
-  await addRule('audience-extra.csv','authorised-register.csv','code','code','Reviewed participant code in the additional fictional export');
-  await page.getByRole('button',{name:'Save scenario snapshot',exact:true}).click();
-  await expect(page.getByRole('button',{name:'Run audit',exact:true})).toHaveCount(2);
-  await page.getByRole('button',{name:'Run audit',exact:true}).last().click();
-  await expect(page.getByLabel('Select audit',{exact:true}).locator('option')).toHaveCount(2);
-  await page.getByLabel('Before audit',{exact:true}).selectOption({index:1});
-  await page.getByLabel('After audit',{exact:true}).selectOption({index:2});
-  await page.getByRole('button',{name:'Compare addition',exact:true}).click();
+  await page.getByRole("button", { name: "Datasets", exact: true }).click();
+  await importCSV(
+    "audience-extra.csv",
+    "occurred;code\r\n2026-05-12;0001\r\n2026-05-13;0002\r\n",
+    "available",
+    ["occurred"],
+  );
+  await page
+    .getByRole("button", { name: "Audits & findings", exact: true })
+    .click();
+  await expect(
+    page.getByRole("button", { name: "Run audit", exact: true }),
+  ).toBeDisabled();
+  await page
+    .getByRole("button", { name: "Release scenarios", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Revise this scope", exact: true })
+    .first()
+    .click();
+  await page
+    .getByRole("group", {
+      name: "Information available to this audience",
+      exact: true,
+    })
+    .getByLabel("audience-extra.csv")
+    .check();
+  await addRule(
+    "observations-unfamiliar.csv",
+    "audience-extra.csv",
+    "occurred",
+    "occurred",
+    "Reviewed same participation day in the additional fictional export",
+  );
+  await addRule(
+    "audience-extra.csv",
+    "authorised-register.csv",
+    "code",
+    "code",
+    "Reviewed participant code in the additional fictional export",
+  );
+  await page
+    .getByRole("button", { name: "Save scenario snapshot", exact: true })
+    .click();
+  await expect(
+    page.getByRole("button", { name: "Run audit", exact: true }),
+  ).toHaveCount(2);
+  await page
+    .getByRole("button", { name: "Run audit", exact: true })
+    .last()
+    .click();
+  await expect(
+    page.getByLabel("Select audit", { exact: true }).locator("option"),
+  ).toHaveCount(2);
+  await page
+    .getByLabel("Before audit", { exact: true })
+    .selectOption({ index: 1 });
+  await page
+    .getByLabel("After audit", { exact: true })
+    .selectOption({ index: 2 });
+  await page
+    .getByRole("button", { name: "Compare addition", exact: true })
+    .click();
   await expect(page.getByText(/New path from/).first()).toBeVisible();
   await page
     .getByRole("button", { name: "Repair comparison", exact: true })

@@ -9,8 +9,8 @@ The authenticated CSV → scenario → real-FalkorDB audit → repair → inspec
 - A file version is the cohort boundary. Time/cohort descriptions are reviewed assumptions; there are no automatic row-level date-window/cohort filters or factual validation that an operator's subject/context assertion is true.
 - Unknown/missing identity keys produce reference-record counts. Names alone cannot establish a person anchor. Supplied reference completeness is not independently known.
 - Advanced scenario controls support explicit confirmed knowledge bundles and contradiction detection. The operator must substantiate the same-subject/context assumption; the product cannot establish it from equal field values.
-- UI quasi-identifier and utility controls focus on the first selected candidate; the API supports multiple candidates and per-dataset definitions. Complex multi-candidate review requires separate UI scenarios or the typed API.
-- Suppression covers chosen columns and rare values within a column. Arbitrary selected-cell policies, composite rare-combination suppression and row suppression are not exposed. No random noise mechanism exists.
+- For multiple candidate versions, choose the candidate in the analytical controls to define per-dataset quasi-identifiers, statistics and protected columns. A single optional identity-anchor definition and one explicit knowledge bundle are exposed in the standard form; richer sets can be supplied through the typed API.
+- Suppression covers chosen columns and selected fields of rare composite combinations. Arbitrary selected-cell policies and row suppression are not exposed. No random noise mechanism exists.
 - Repairs are explicitly selected declarative recipes, capped at ten branches. There is no exhaustive automatic optimizer. Compare exposure, coverage, utility and retention separately; no arbitrary combined privacy score is used.
 - The compact investigation view shows actual dataset/rule chains and masked endpoint indices. It is intentionally not an unrestricted graph explorer.
 - Referenced immutable source versions and recorded release branches cannot be individually removed through draft deletion. Full workspace deletion removes local review/history together.
@@ -27,7 +27,7 @@ The authenticated CSV → scenario → real-FalkorDB audit → repair → inspec
 ## Recommended next hardening
 
 1. Add reviewed database migrations, explicit key rotation/recovery administration and fault-injection tests at every publication checkpoint.
-2. Extend the guided UI for multiple candidate-specific utilities and selected-cell/composite suppression policies.
+2. Extend the guided UI for richer anchor/bundle sets and arbitrary selected-cell policies.
 3. Add more independent generated-property fixtures, long-running quota/soak tests, accessibility tooling and broader browser coverage.
 4. Independently review graph candidate-set semantics, threat model, session/storage boundaries and deployment configuration before real sensitive-data use.
 5. With authorised credentials, run and record a live model tool-call smoke test, verify dynamic request history and confirm provider-specific retention settings.
