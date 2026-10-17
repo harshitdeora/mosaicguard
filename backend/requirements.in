@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+pydantic
+python-multipart
+cryptography
+argon2-cffi
+falkordb
+httpx
+python-dotenv
+pytest
+openai
