@@ -85,3 +85,13 @@ def test_rare_combinations_suppress_only_declared_cells():
     out,notes=transform(d,[{'column':'region','kind':'rare_suppress','rare_threshold':2,'combination_columns':['region','cohort']}],[])
     assert out['rows']==[['A','X','2'],['A','X','3'],[None,'Y','4'],['B',None,'5']]
     assert notes[0]['suppressed_cells']==1 and d['rows'][2][0]=='A'
+
+def test_long_reviewed_numbers_never_round_into_exact_matches():
+    c={'type':'number'}
+    a='1234567890123456789012345678901234567890'
+    b='1234567890123456789012345678901234567891'
+    assert canonical(a,c,{})!=canonical(b,c,{})
+    assert canonical('1e3',c,{})==canonical('1000.00',c,{})
+    assert canonical('-0.00',c,{})==canonical('0',c,{})
+    d=data(['n'],[[b]],{'n':'number'});out,_=transform(d,[{'column':'n','kind':'numeric_bucket','width':10}],[])
+    assert out['rows'][0][0]==a+'..1234567890123456789012345678901234567900'

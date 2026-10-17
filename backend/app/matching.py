@@ -14,7 +14,12 @@ def canonical(value, column, rule):
     if rule.get('casefold'): value=value.casefold()
     if column['type']=='number' and not column.get('generalization'):
         number=Decimal(value)
-        return ['number','0' if number==0 else str(number.normalize())]
+        # Decimal.normalize() applies the ambient precision and can round long IDs/numbers.
+        # Canonicalize the exact coefficient/exponent tuple without arithmetic.
+        if number==0:return ['number',0,'0',0]
+        sign,digits,exponent=number.as_tuple();digits=list(digits)
+        while digits and digits[-1]==0:digits.pop();exponent+=1
+        return ['number',sign,''.join(map(str,digits)),exponent]
     if column['type']=='date' and not column.get('generalization'):
         return ['date',datetime.strptime(value,column['date_format']).date().isoformat()]
     return ['text',value]

@@ -23,7 +23,7 @@
 - Implemented declarative repair branches, complete eligible re-audits, utility drift/retention comparisons, content-bound reproducible ZIPs, formula transport verification and local release records.
 - Added serialized durable jobs, cooperative cancellation/retry, interruption recovery, atomic metadata/result publication and deletion tombstones.
 - Added guided React UI, local rules-based guidance and optional consent-controlled read-only OpenAI adapter. Live model mode is unverified (no key configured).
-- Real graph correctness/security/recovery suite: 38 passed. Two Edge browser journeys pass, including unfamiliar semicolon CSVs, an added export, stale-result blocking, comparison, two repairs, independent package reopening, refresh, 390px layout, unauthorised request, invalid input, multiple-candidate analytical controls, explicit incomplete scope, failed repair and deletion.
+- Real graph correctness/security/recovery suite: 39 passed. Two Edge browser journeys pass, including unfamiliar semicolon CSVs, an added export, stale-result blocking, comparison, two repairs, independent package reopening, refresh, 390px layout, unauthorised request, invalid input, multiple-candidate analytical controls, explicit incomplete scope, failed repair and deletion.
 - Five-file benchmark: 5,000 imported records; audit 2.563s, import/audit/evaluation 5.425s, peak traced Python allocations 12,855,974 bytes. Detailed envelope and fictional candidate-pair evaluation in `docs/benchmark.json`.
 - Backup/restore smoke: passed after real graph SAVE/restart, fresh metadata/vault restore, login/evidence/ZIP digest checks and cleanup.
 - Production TypeScript/Vite build passed. Frontend dependency audit: zero vulnerabilities after Vite/esbuild updates.
@@ -34,3 +34,4 @@
 - The standard arbitrary single-candidate import-to-reviewed-export workflow is implemented and verified without an LLM key.
 - Advanced knowledge-bundle controls are available; normal paths remain separate. Subject/time/cohort statements are operator assumptions, not automatic factual validation.
 - Added rare-combination suppression and per-candidate analytical controls. Arbitrary selected-cell policies, exhaustive optimization, broad fault injection, full accessibility/security audits and public TLS deployment remain outside the verified v1. See `docs/LIMITATIONS.md`.
+- Final numeric-key review replaced precision-dependent Decimal normalisation with an exact coefficient/exponent encoding, added explicit numeric range review and exact high-precision bucket arithmetic. Regression verified with distinct 40-digit values.

@@ -1,7 +1,7 @@
 import copy
 from collections import Counter, defaultdict
 from datetime import datetime
-from decimal import Decimal, ROUND_FLOOR
+from decimal import Decimal, ROUND_FLOOR, localcontext
 from statistics import mean, median
 from .core import get
 
@@ -30,10 +30,12 @@ def transform(data,recipe,protected):
         elif t['kind']=='numeric_bucket':
             if col['type']!='number': raise ValueError('Numeric buckets require a reviewed numeric column.')
             width=Decimal(str(t['width']))
-            for row in out['rows']:
-                if row[idx] is not None:
-                    lo=(Decimal(row[idx])/width).to_integral_value(rounding=ROUND_FLOOR)*width
-                    row[idx]=f'{lo}..{lo+width}'
+            with localcontext() as ctx:
+                ctx.prec=512
+                for row in out['rows']:
+                    if row[idx] is not None:
+                        lo=(Decimal(row[idx])/width).to_integral_value(rounding=ROUND_FLOOR)*width
+                        row[idx]=f'{lo}..{lo+width}'
             col['generalization']='numeric_bucket';col['bucket_width']=str(width)
         else:
             if col['type']!='date': raise ValueError('Date generalisation requires an explicit reviewed date format.')

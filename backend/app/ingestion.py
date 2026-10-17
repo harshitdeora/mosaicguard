@@ -101,6 +101,8 @@ def validate_columns(data, columns):
                 if col.type=='number':
                     d=Decimal(row[i])
                     if not d.is_finite(): raise ValueError()
+                    if len(d.as_tuple().digits)>100 or not -100<=d.adjusted()<=100:
+                        fail(f'Column {i+1}, logical data record {n+1}: numeric review supports up to 100 significant digits and adjusted exponents from -100 to 100. Select text to preserve a larger identifier or value.')
                 elif col.type=='date':
                     from datetime import datetime
                     datetime.strptime(row[i],col.date_format)
