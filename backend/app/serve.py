@@ -1,7 +1,25 @@
 """Production entry point with a platform-supplied port and proxy trust."""
 import os
+from pathlib import Path
 
 import uvicorn
+
+
+APP_UID = 10001
+APP_GID = 10001
+
+
+def prepare_data_directory():
+    """Make a platform-mounted data directory writable, then drop root privileges."""
+    if os.geteuid() != 0:
+        return
+
+    data_directory = Path(os.getenv('MOSAIC_DATA', '/data'))
+    data_directory.mkdir(parents=True, exist_ok=True)
+    os.chown(data_directory, APP_UID, APP_GID)
+    os.setgroups([])
+    os.setgid(APP_GID)
+    os.setuid(APP_UID)
 
 
 def configuration():
@@ -16,4 +34,5 @@ def configuration():
 
 
 if __name__ == '__main__':
+    prepare_data_directory()
     uvicorn.run('backend.app.main:app', **configuration())

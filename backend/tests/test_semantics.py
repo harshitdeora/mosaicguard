@@ -10,7 +10,7 @@ from backend.app.ingestion import parse_csv, ParseConfig, csv_bytes, validate_co
 from backend.app.matching import bindings, interval, overlap, canonical
 from backend.app.repairs import transform, compare_utility, utility_result
 from backend.app.exports import package
-from backend.app.serve import configuration
+from backend.app.serve import APP_GID, APP_UID, configuration, prepare_data_directory
 from backend.app import main as main_module
 from fixtures.generate import beginner_kit
 
@@ -112,6 +112,23 @@ def test_production_server_configuration(monkeypatch):
     monkeypatch.setenv('PORT','9123');monkeypatch.setenv('FORWARDED_ALLOW_IPS','10.0.0.0/8')
     cfg=configuration()
     assert cfg['port']==9123 and cfg['proxy_headers'] and cfg['forwarded_allow_ips']=='10.0.0.0/8'
+
+def test_production_server_prepares_mounted_data_and_drops_privileges(monkeypatch,tmp_path):
+    calls=[]
+    monkeypatch.setenv('MOSAIC_DATA',str(tmp_path/'data'))
+    monkeypatch.setattr('backend.app.serve.os.geteuid',lambda:0,raising=False)
+    monkeypatch.setattr('backend.app.serve.os.chown',lambda path,uid,gid:calls.append(('chown',path,uid,gid)),raising=False)
+    monkeypatch.setattr('backend.app.serve.os.setgroups',lambda groups:calls.append(('setgroups',groups)),raising=False)
+    monkeypatch.setattr('backend.app.serve.os.setgid',lambda gid:calls.append(('setgid',gid)),raising=False)
+    monkeypatch.setattr('backend.app.serve.os.setuid',lambda uid:calls.append(('setuid',uid)),raising=False)
+    prepare_data_directory()
+    assert (tmp_path/'data').is_dir()
+    assert calls==[
+        ('chown',tmp_path/'data',APP_UID,APP_GID),
+        ('setgroups',[]),
+        ('setgid',APP_GID),
+        ('setuid',APP_UID),
+    ]
 
 def test_public_setup_token_guard(monkeypatch):
     monkeypatch.setattr(main_module,'SETUP_TOKEN','private-setup-token')
