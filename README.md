@@ -6,15 +6,7 @@ This product reports evidence under a supplied-data and attacker-knowledge model
 
 ![Synthetic audit review](docs/screenshots/audit-desktop.png)
 
-## Graph Hacks demo
-
-MosaicGuard is entered in **Track 01 — Agents That Act on Connected Data**. Its audit and repair workflow uses confirmed graph relationships to investigate multi-hop linkage, expose the exact evidence path, and act by evaluating a repaired release candidate.
-
-- **Live deployment:** <https://mosaicguard-production.up.railway.app/>
-- **Recording dataset:** [`examples/hackathon_demo/`](examples/hackathon_demo/)
-- **Exact click-by-click video script:** [`docs/HACKATHON_DEMO_VIDEO.md`](docs/HACKATHON_DEMO_VIDEO.md)
-
-The recording example asks whether an “anonymous” employee training survey can be linked to people through an attendance roster. The verified baseline has eight candidate records, eight assessed path records, one single-candidate path record, and zero unassessed records. Removing `course_code` blocks that reviewed path while preserving the configured department-count analysis; the product continues to show the resulting coverage limit.
+**Live application:** <https://mosaicguard-production.up.railway.app/>
 
 ## Start locally
 
@@ -27,7 +19,7 @@ python scripts/configure.py
 docker compose up --build -d
 ```
 
-Open **http://127.0.0.1:8027** and create your owner account. Back up `.env` securely outside Git **before importing data**. Configuration never overwrites an existing key. The app binds to localhost; the graph uses password-protected localhost port 6397. No hosted service is created.
+Open **http://127.0.0.1:8027** and create your owner account. Back up `.env` securely outside Git **before importing data**. Configuration never overwrites an existing key. The app binds to localhost; the graph uses password-protected localhost port 6397. These commands create only local services.
 
 To stop: `docker compose stop`. To resume: `docker compose up -d`. Avoid `docker compose down -v`, which removes the durable data volumes.
 
@@ -71,14 +63,12 @@ Browser tests use Edge on Windows. On Linux, run `npx playwright install --with-
 ## Documentation
 
 - [Five-minute beginner walkthrough and sample data](docs/BEGINNER_TUTORIAL.md)
-- [Graph Hacks recording walkthrough and verified training example](docs/HACKATHON_DEMO_VIDEO.md)
 - [Detailed first-use, CSV preparation and advanced synthetic demo](docs/USER_GUIDE.md)
 - [Architecture, graph and candidate-set semantics](docs/ARCHITECTURE.md)
 - [Keys, deployment, deletion, backup and restore](docs/OPERATIONS.md)
 - [Verification and measured limits](docs/VERIFICATION.md)
 - [Exact limitations and remaining hardening](docs/LIMITATIONS.md)
 - [Build progress and evidence](PROGRESS.md)
-- [Hackathon notes and AI disclosure](docs/SUBMISSION.md)
 
 No external model credential is required. The local assistant is labelled rules-based. An optional OpenAI tool-calling adapter requires a server key, a reviewed payload policy and explicit workspace enablement. Its live execution remains unverified unless separately recorded in verification evidence.
 

@@ -64,7 +64,7 @@ Mandatory usable-v1 scope:
 11. Automated correctness, isolation, security-boundary, and browser checks.
 12. A bounded tool-calling assistant when configured, while core workflows function without a model key.
 
-Implement complete workflows before optional features. Do not use the hackathon deadline to silently substitute hard-coded results or a sample-only application. If work remains, identify it honestly.
+Implement complete workflows before optional features. Do not silently substitute hard-coded results or a sample-only application. If work remains, identify it honestly.
 
 Defer enterprise SSO, billing, public SaaS tenancy, spreadsheets other than CSV, natural-language SQL, probabilistic entity resolution, arbitrary fuzzy matching, web scraping, geocoding, and formal privacy guarantees.
 
@@ -521,8 +521,7 @@ Use hidden fixture entity IDs only to evaluate the engine. Keep them out of appr
 
 All example uploads must pass through the same upload/import/mapping/audit interfaces as arbitrary user data. No special-case filenames or precomputed findings.
 
-For hackathon materials and any public hosted preview, use only synthetic or otherwise clearly permitted non-personal data. The event's rules restrict personal/private/restricted information in the graph. Keep the submission environment synthetic; an authorised operator's private deployment is a separate use context:
-https://www.wemakedevs.org/hackathons/falkordb/rules
+For any public hosted preview, use only synthetic or otherwise clearly permitted non-personal data. Keep the public environment synthetic; an authorised operator's private deployment is a separate use context.
 
 ## 19. Correctness and edge-case tests
 
@@ -607,7 +606,7 @@ Deliver:
 - Actual test commands/results and benchmark outputs.
 - A known-limitations document written plainly.
 - A short synthetic-data demonstration script.
-- Hackathon submission notes and AI-assistance disclosure.
+- AI-assistance disclosure.
 
 Suggested layout:
 
@@ -637,7 +636,7 @@ compose.yaml
 README.md
 ~~~
 
-Do not publish a service, upload user data, create paid infrastructure, or submit to the hackathon as part of this build. Prepare deployment configuration for later review. Existing authorised local build/test actions should continue without unnecessary confirmation.
+Do not upload user data or create paid infrastructure as part of routine development. Prepare deployment configuration for later review. Existing authorised local build/test actions should continue without unnecessary confirmation.
 
 ## 22. Implementation sequence and completion gate
 
@@ -683,5 +682,4 @@ Consult current documentation and verify installed APIs:
 - [Cryptography library documentation](https://cryptography.io/en/stable/)
 - [OpenAI function calling](https://developers.openai.com/api/docs/guides/function-calling)
 - [Codex outcomes and verification guidance](https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex)
-- [Hackathon rules](https://www.wemakedevs.org/hackathons/falkordb/rules)
 

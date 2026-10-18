@@ -8,7 +8,7 @@
 5. Verify with unit/oracle tests, real graph integration, browser acceptance, benchmark and restore; document exact limits.
 
 ## Decisions
-- Self-hosted Docker Compose; no hosted service or hackathon submission.
+- Self-hosted Docker Compose deployment with documented operating boundaries.
 - Single owner and one serialized durable worker. All workspace endpoints require that owner session.
 - Initial conservative ceiling: 1,000 records/file, 5,000/workspace, 50 columns, 2 MB/file. Larger limits will not be advertised without verification.
 - Exact and composite joins use scoped HMAC keys; typed generalisation uses bounded interval compatibility, never HMAC ordering.

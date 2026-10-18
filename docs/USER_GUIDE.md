@@ -47,4 +47,4 @@ The benchmark generator in `fixtures/generate.py` can also produce about 200 fic
 5. Remove badge and generalise survey_day to quarters with a typed-compatible rule. Plausible calendar matches broaden, while department/rating measurements remain available. The attendance path still exists.
 6. Record an original package as released and re-run a new scenario. Historical exposure persists despite changing the newest candidate. Inspect it separately.
 
-For a three-minute review: show import correction, the confirmed composite/rule controls, an expanded audit, contrasting branch cards, then the package acknowledgment and explicit release-history action. Use only synthetic data for demonstrations or hackathon environments.
+For a three-minute review: show import correction, the confirmed composite/rule controls, an expanded audit, contrasting branch cards, then the package acknowledgment and explicit release-history action. Use only synthetic data for public demonstrations.

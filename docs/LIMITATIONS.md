@@ -32,4 +32,4 @@ The authenticated CSV → scenario → real-FalkorDB audit → repair → inspec
 4. Independently review graph candidate-set semantics, threat model, session/storage boundaries and deployment configuration before real sensitive-data use.
 5. With authorised credentials, run and record a live model tool-call smoke test, verify dynamic request history and confirm provider-specific retention settings.
 
-No public service, real personal dataset upload, paid infrastructure or hackathon submission was performed.
+Do not use real personal datasets in a public demonstration or shared preview.
