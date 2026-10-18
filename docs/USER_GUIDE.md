@@ -1,6 +1,6 @@
 # First use and CSV preparation
 
-Create the owner account on the local first-run screen. Create a named workspace. Pick **Use my CSVs** for your authorised files or **Explore a synthetic example** for five locally generated fictional datasets. The example imports through the same upload, parse-review and durable ingestion endpoints used for other files; no precomputed audit results exist.
+Create the owner account on the local first-run screen. Create a named workspace. Pick **Use my CSVs** for your authorised files or **Explore a simple example** for two locally generated fictional datasets. Start with the [five-minute beginner walkthrough](BEGINNER_TUTORIAL.md). The example imports through the same upload, parse-review and durable ingestion endpoints used for other files; no precomputed audit results exist.
 
 ## Prepare and review CSVs
 
@@ -36,9 +36,9 @@ Review residual exposure and coverage, acknowledge them, then build the ZIP. The
 
 Downloading creates an artifact. **Record as released** separately records the actual audience/date without transmitting anything. Prior releases remain in that audience's model. Future local repairs cannot undo past sharing. Historical packages indicate when a newer workspace revision exists.
 
-## Five-file demonstration
+## Advanced five-file demonstration
 
-The kit contains about 200 fictional participants in `feedback`, `attendance`, `directory`, `badges` and `calendar` CSVs. No rows are based on real people and there are no hidden entity-ID columns in the product.
+The benchmark generator in `fixtures/generate.py` can also produce about 200 fictional participants in `feedback`, `attendance`, `directory`, `badges` and `calendar` CSVs. Run `python fixtures/generate.py` to create them next to the generator. No rows are based on real people and there are no hidden entity-ID columns in the product.
 
 1. Begin with feedback as the candidate, attendance and directory as available information. Confirm feedback.session → attendance.session and attendance.participant_key → directory.participant_key. Five fictional participants attend each session, producing an ambiguous route. Directory participant_key can be a defensible synthetic entity key.
 2. Add the badge export and calendar to a new scenario. Confirm feedback.badge → badges.badge → directory.participant_key, and feedback.survey_day → calendar.survey_day → directory.participant_key. Their paths add more selective candidate sets. Compare the before/after audits with matching scopes.

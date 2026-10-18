@@ -1,0 +1,7 @@
+event_code,age_group,city,satisfaction,feedback_topic
+EVT-100,18-29,Pune,5,Course pace
+EVT-100,30-39,Pune,4,Materials
+EVT-200,18-29,Mumbai,3,Timing
+EVT-300,40-49,Delhi,5,Mentoring
+EVT-300,30-39,Delhi,4,Course pace
+EVT-400,18-29,Bengaluru,2,Location

@@ -3,9 +3,65 @@ import csv
 import io
 from datetime import date,timedelta
 
+def csv_text(headers,rows):
+    s=io.StringIO(newline='');w=csv.writer(s,lineterminator='\r\n');w.writerow(headers);w.writerows(rows);return s.getvalue()
+
+def beginner_kit():
+    """Two tiny files for learning the product without the five-file demo."""
+    return [
+      {
+        'name':'anonymous_feedback.csv',
+        'role':'candidate',
+        'types':{'satisfaction':'number'},
+        'identifiers':[],
+        'sensitive':['feedback_topic'],
+        'meanings':{
+          'event_code':'Workshop attended by the respondent',
+          'age_group':'Respondent age band',
+          'city':'Respondent city',
+          'satisfaction':'Satisfaction score from 1 to 5',
+          'feedback_topic':'Main subject of the response',
+        },
+        'csv':csv_text(
+          ['event_code','age_group','city','satisfaction','feedback_topic'],
+          [
+            ['EVT-100','18-29','Pune',5,'Course pace'],
+            ['EVT-100','30-39','Pune',4,'Materials'],
+            ['EVT-200','18-29','Mumbai',3,'Timing'],
+            ['EVT-300','40-49','Delhi',5,'Mentoring'],
+            ['EVT-300','30-39','Delhi',4,'Course pace'],
+            ['EVT-400','18-29','Bengaluru',2,'Location'],
+          ],
+        ),
+      },
+      {
+        'name':'workshop_registration.csv',
+        'role':'reference',
+        'types':{},
+        'identifiers':['member_id','member_name'],
+        'sensitive':[],
+        'meanings':{
+          'event_code':'Workshop registration code',
+          'member_id':'Unique fictional member identifier',
+          'member_name':'Fictional member name',
+          'city':'Registered member city',
+        },
+        'csv':csv_text(
+          ['event_code','member_id','member_name','city'],
+          [
+            ['EVT-100','M001','Asha Rao','Pune'],
+            ['EVT-100','M002','Rohan Mehta','Pune'],
+            ['EVT-200','M003','Nila Shah','Mumbai'],
+            ['EVT-300','M004','Kabir Singh','Delhi'],
+            ['EVT-300','M005','Maya Iyer','Delhi'],
+            ['EVT-300','M006','Dev Patel','Delhi'],
+            ['EVT-400','M007','Tara Nair','Bengaluru'],
+          ],
+        ),
+      },
+    ]
+
 def kit(n=200):
-    def csv_text(headers,rows):
-        s=io.StringIO(newline='');w=csv.writer(s,lineterminator='\r\n');w.writerow(headers);w.writerows(rows);return s.getvalue()
     rows=[]
     for i in range(n):
         rows.append({'key':f'FICT-{i:05}','dept':['Learning','Operations','Research','Outreach'][i%4],

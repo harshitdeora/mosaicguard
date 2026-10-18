@@ -137,8 +137,8 @@ def workspaces(s=Depends(session)): return items('workspace')
 
 @app.get('/api/examples')
 def examples(s=Depends(session)):
-    from fixtures.generate import kit
-    return kit()
+    from fixtures.generate import beginner_kit
+    return beginner_kit()
 
 @app.post('/api/workspaces')
 def create_workspace(body:WorkspaceName,s=Depends(session)):

@@ -1,6 +1,6 @@
 # Verification evidence
 
-Performed on 2026-10-17 on Windows, Python 3.14.0, Node 22.19.0, Docker Desktop Linux engine 29.2.1, and the digest-pinned real FalkorDB image in `compose.yaml`. No external model key was configured. No personal datasets were used.
+Performed on 2026-10-18 on Windows, Python 3.14.0, Node 22.19.0, Docker Desktop Linux engine 29.2.1, and the digest-pinned real FalkorDB image in `compose.yaml`. No external model key was configured. No personal datasets were used.
 
 ## Automated correctness and boundary tests
 
@@ -8,11 +8,13 @@ Performed on 2026-10-17 on Windows, Python 3.14.0, Node 22.19.0, Docker Desktop 
 .\.venv\Scripts\python.exe -m pytest backend/tests -q --junitxml=docs/junit.xml
 ```
 
-**39 passed** in the final recorded run. [JUnit evidence](junit.xml).
+**40 passed** in the final recorded run. [JUnit evidence](junit.xml).
 
 Coverage includes logical multiline records, BOM and alternate encodings, semicolon/tab imports, leading-zero IDs, ambiguous dates, literal `NA`, explicit nulls and ragged-row exclusions, duplicate/blank headers, malformed quoting, empty/header-only/binary/oversized input, dense 50-column/1,000-record parsing, reviewed Unicode/case rules, exact composite conjunction and missing components.
 
 A regression test verifies that numbers longer than Decimal's default 28-digit context never round into the same exact key, and that their numeric bucket boundaries remain exact within the documented range.
+
+The two-file beginner fixture is also checked against its documented per-response candidate counts, so the walkthrough's expected result remains reproducible.
 
 Real graph tests compare candidate sets to an independent relational/set oracle, union one-to-many intermediate possibilities, deduplicate confirmed entity anchors, keep independent paths separate, explicitly intersect knowledge bundles and report contradictions. They test partial fan-out refusal to claim uniqueness, typed date/numeric interval boundaries, negative buckets, no ordering of HMAC tokens, and whitespace-only composite components.
 

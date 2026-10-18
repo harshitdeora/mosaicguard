@@ -254,9 +254,11 @@ function App() {
           name: c.name,
           type: file.types[c.name] || "text",
           date_format: file.types[c.name] === "date" ? "%Y-%m-%d" : null,
-          meaning: "",
-          identifier: c.name === "participant_key",
-          sensitive: c.name === "rating",
+          meaning: file.meanings?.[c.name] || "",
+          identifier:
+            file.identifiers?.includes(c.name) || c.name === "participant_key",
+          sensitive:
+            file.sensitive?.includes(c.name) || c.name === "rating",
         }));
         const job = await api(
           "/w/" + w.id + "/uploads/" + u.id + "/confirm",
@@ -271,7 +273,7 @@ function App() {
         }
       }
       setNotice(
-        "Five fictional CSVs imported through the normal import service. Review their roles and confirm mappings in a release scenario.",
+        "Two small fictional CSVs are ready. Open Release scenarios and confirm the event_code mapping to see which responses narrow to one registered member.",
       );
       setPage(2);
     } catch (e) {
@@ -581,10 +583,10 @@ function App() {
                   <div className="large-icon violet">
                     <Network />
                   </div>
-                  <h2>Explore a synthetic example</h2>
+                  <h2>Explore a simple example</h2>
                   <p>
-                    Follow five fictional training datasets through real
-                    imports, confirmed mappings, and release review.
+                    Follow two tiny fictional datasets through a real mapping,
+                    audit, repair, and release review.
                   </p>
                   <button
                     className="secondary"

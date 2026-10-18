@@ -23,7 +23,7 @@ To stop: `docker compose stop`. To resume: `docker compose up -d`. Avoid `docker
 
 ## Supported workflow
 
-1. Create a private workspace; upload CSVs or explore five locally generated fictional CSVs.
+1. Create a private workspace; upload CSVs or explore two small, locally generated fictional CSVs.
 2. Correct delimiter, encoding, quoting and null settings; review types, meanings, dataset role and row unit. Originals remain immutable.
 3. Define an audience, purpose, candidate versions, available references, confirmed exact/composite or typed-compatible rules, diagnostics and analytical requirements.
 4. Profile fan-out and run a durable audit. Inspect separate paths, masked local evidence, class sizes, assumptions and missing coverage.
@@ -60,7 +60,8 @@ Browser tests use Edge on Windows. On Linux, run `npx playwright install --with-
 
 ## Documentation
 
-- [First-use, CSV preparation and synthetic demo](docs/USER_GUIDE.md)
+- [Five-minute beginner walkthrough and sample data](docs/BEGINNER_TUTORIAL.md)
+- [Detailed first-use, CSV preparation and advanced synthetic demo](docs/USER_GUIDE.md)
 - [Architecture, graph and candidate-set semantics](docs/ARCHITECTURE.md)
 - [Keys, deployment, deletion, backup and restore](docs/OPERATIONS.md)
 - [Verification and measured limits](docs/VERIFICATION.md)

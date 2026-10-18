@@ -10,6 +10,7 @@ from backend.app.ingestion import parse_csv, ParseConfig, csv_bytes, validate_co
 from backend.app.matching import bindings, interval, overlap, canonical
 from backend.app.repairs import transform, compare_utility, utility_result
 from backend.app.exports import package
+from fixtures.generate import beginner_kit
 
 def data(headers,rows,types=None):return {'columns':[{'id':x,'name':x,'type':(types or {}).get(x,'text'),'date_format':'%Y-%m-%d'} for x in headers],'rows':rows}
 
@@ -95,3 +96,12 @@ def test_long_reviewed_numbers_never_round_into_exact_matches():
     assert canonical('-0.00',c,{})==canonical('0',c,{})
     d=data(['n'],[[b]],{'n':'number'});out,_=transform(d,[{'column':'n','kind':'numeric_bucket','width':10}],[])
     assert out['rows'][0][0]==a+'..1234567890123456789012345678901234567900'
+
+def test_beginner_kit_has_the_documented_candidate_counts():
+    files=beginner_kit()
+    assert [f['name'] for f in files]==['anonymous_feedback.csv','workshop_registration.csv']
+    feedback=list(csv.DictReader(io.StringIO(files[0]['csv'])))
+    registrations=list(csv.DictReader(io.StringIO(files[1]['csv'])))
+    counts=defaultdict(int)
+    for row in registrations:counts[row['event_code']]+=1
+    assert [counts[row['event_code']] for row in feedback]==[2,2,1,3,3,1]
