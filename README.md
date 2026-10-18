@@ -4,8 +4,6 @@ Private, self-hosted dataset release review. Import your own CSVs, confirm what 
 
 This product reports evidence under a supplied-data and attacker-knowledge model. A single candidate is **not proof of identity**. No matches do not establish anonymity, legal compliance, or a differential-privacy guarantee.
 
-![Synthetic audit review](docs/screenshots/audit-desktop.png)
-
 **Live application:** <https://mosaicguard-production.up.railway.app/>
 
 ## Start locally
@@ -34,6 +32,74 @@ To stop: `docker compose stop`. To resume: `docker compose up -d`. Avoid `docker
 7. Record sharing separately with **Record as released**. Historical versions remain available to that audience in later scenarios.
 
 **Conservative limits:** 2 MB/file, 1,000 logical data records/file, 50 columns, 8,192 characters/cell, 5,000 imported records/workspace, 3 joins/path, 100 paths, 20,000 endpoint results/path, 250,000 typed comparisons/rule. Bounds produce partial coverage, never artificial uniqueness. See [measured benchmark](docs/benchmark.json).
+
+## FalkorDB graph data model
+
+FalkorDB is the authoritative linkage graph. Every audit receives its own opaque workspace and audit namespace. Plaintext names and source values are not stored in the graph; matching values and identity anchors are represented by scoped HMAC tokens.
+
+```text
+(DatasetVersion)
+       |
+       | HAS_RECORD
+       v
+    (Record) --OUT_KEY--> (JoinKey) <--IN_KEY-- (Record)
+
+    (Finding) --EVIDENCE_RULE--> (JoinRule)
+```
+
+| Node | Important properties | Purpose |
+| --- | --- | --- |
+| `DatasetVersion` | `wid`, `sid`, `did` | Identifies one immutable dataset version inside an audit. |
+| `Record` | `wid`, `sid`, `did`, `idx`, `entity` | Represents one logical CSV record. `entity` is an opaque scoped token. |
+| `JoinKey` | `wid`, `sid`, `rule`, `token` | Represents one complete exact or composite matching key for a confirmed rule. |
+| `Finding` | `wid`, `sid`, `fid`, `summary` | Stores the bounded explanation for a completed graph finding. |
+| `JoinRule` | `wid`, `sid`, `rid` | Identifies the confirmed rule supporting a finding. |
+
+| Relationship | Meaning |
+| --- | --- |
+| `DatasetVersion-[:HAS_RECORD]->Record` | Dataset membership and provenance. It is not used as an attacker traversal edge. |
+| `Record-[:OUT_KEY]->JoinKey` | A source record supplies the confirmed rule key. |
+| `Record-[:IN_KEY]->JoinKey` | A destination record supplies the matching rule key. |
+| `Finding-[:EVIDENCE_RULE]->JoinRule` | Connects an explanation to the rule chain that produced it. |
+
+A composite rule creates one atomic `JoinKey` token from all selected components, so every component must match. Join keys are scoped by workspace, audit and rule to prevent unrelated scenarios from connecting through the same value.
+
+## Cypher queries and graph algorithms
+
+All Cypher is parameterised. User text never becomes executable Cypher. [`backend/app/graph.py`](backend/app/graph.py) builds only fixed, whitelisted traversal patterns containing at most three confirmed joins.
+
+| Query | Role |
+| --- | --- |
+| [`records.cypher`](queries/records.cypher) | Creates the `DatasetVersion`, `Record` nodes and `HAS_RECORD` provenance edges. |
+| [`bind_out.cypher`](queries/bind_out.cypher) | Connects source records to scoped `JoinKey` nodes with `OUT_KEY`. |
+| [`bind_in.cypher`](queries/bind_in.cypher) | Connects matching destination records to the same keys with `IN_KEY`. |
+| [`candidates.cypher`](queries/candidates.cypher) | Traverses an approved rule chain and returns distinct endpoint candidates for every source record. |
+| [`finding.cypher`](queries/finding.cypher) | Stores a finding and its supporting `EVIDENCE_RULE` relationships. |
+| [`evidence.cypher`](queries/evidence.cypher) | Retrieves the stored summary for one exact audit finding. |
+
+The core candidate traversal has this shape:
+
+```cypher
+MATCH (s:Record {wid:$wid, sid:$sid, did:$source})
+      -[:OUT_KEY]->(k0:JoinKey {wid:$wid, sid:$sid, rule:$r0})
+      <-[:IN_KEY]-(t0:Record {wid:$wid, sid:$sid, did:$d0})
+RETURN DISTINCT s.idx, t0.entity, t0.idx
+LIMIT 20001
+```
+
+For longer approved paths, the same fixed `OUT_KEY → JoinKey ← IN_KEY` pattern is repeated. Dataset, workspace, audit and rule identifiers remain query parameters.
+
+The product depends on these deterministic graph algorithms:
+
+1. **Rule-chain enumeration:** confirmed directed mappings are searched without cycles, to a maximum depth of three joins and 100 paths.
+2. **Exact and composite matching:** complete keys are HMAC-tokenised into atomic `JoinKey` nodes. Composite components are conjunctive, not separate optional matches.
+3. **Typed-compatible matching:** exact components first block possible pairs; reviewed numeric or date intervals are then compared in bounded application memory. Accepted pairs receive scoped graph keys. Exhausting the comparison budget produces partial coverage.
+4. **Candidate-set aggregation:** the candidate query returns distinct endpoint entity tokens. Duplicate intermediate routes are unioned within one path before candidate counts are calculated.
+5. **Path-specific evidence:** independent paths remain separate findings. They are intersected only when the operator explicitly confirms a same-subject knowledge bundle.
+6. **Coverage-safe limits:** missing components, blocked rules, query timeouts and result limits create unassessed or partial results. They never create an artificial uniqueness claim.
+7. **Repair re-audit:** every repair creates a new immutable candidate version, rebuilds its graph projection and reruns every eligible path before risk and analytical utility are compared.
+
+See [Architecture](docs/ARCHITECTURE.md) for candidate-set semantics, typed intervals, historical exposure and evidence boundaries.
 
 ## Development and checks
 
