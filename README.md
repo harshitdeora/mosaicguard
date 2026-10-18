@@ -6,6 +6,16 @@ This product reports evidence under a supplied-data and attacker-knowledge model
 
 ![Synthetic audit review](docs/screenshots/audit-desktop.png)
 
+## Graph Hacks demo
+
+MosaicGuard is entered in **Track 01 — Agents That Act on Connected Data**. Its audit and repair workflow uses confirmed graph relationships to investigate multi-hop linkage, expose the exact evidence path, and act by evaluating a repaired release candidate.
+
+- **Live deployment:** <https://mosaicguard-production.up.railway.app/>
+- **Recording dataset:** [`examples/hackathon_demo/`](examples/hackathon_demo/)
+- **Exact click-by-click video script:** [`docs/HACKATHON_DEMO_VIDEO.md`](docs/HACKATHON_DEMO_VIDEO.md)
+
+The recording example asks whether an “anonymous” employee training survey can be linked to people through an attendance roster. The verified baseline has eight candidate records, eight assessed path records, one single-candidate path record, and zero unassessed records. Removing `course_code` blocks that reviewed path while preserving the configured department-count analysis; the product continues to show the resulting coverage limit.
+
 ## Start locally
 
 Requires Docker Desktop with Linux containers and Python 3.14 (Python is used only for initial configuration if using Docker).
@@ -61,6 +71,7 @@ Browser tests use Edge on Windows. On Linux, run `npx playwright install --with-
 ## Documentation
 
 - [Five-minute beginner walkthrough and sample data](docs/BEGINNER_TUTORIAL.md)
+- [Graph Hacks recording walkthrough and verified training example](docs/HACKATHON_DEMO_VIDEO.md)
 - [Detailed first-use, CSV preparation and advanced synthetic demo](docs/USER_GUIDE.md)
 - [Architecture, graph and candidate-set semantics](docs/ARCHITECTURE.md)
 - [Keys, deployment, deletion, backup and restore](docs/OPERATIONS.md)
