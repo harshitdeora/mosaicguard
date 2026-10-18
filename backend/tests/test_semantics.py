@@ -10,6 +10,8 @@ from backend.app.ingestion import parse_csv, ParseConfig, csv_bytes, validate_co
 from backend.app.matching import bindings, interval, overlap, canonical
 from backend.app.repairs import transform, compare_utility, utility_result
 from backend.app.exports import package
+from backend.app.serve import configuration
+from backend.app import main as main_module
 from fixtures.generate import beginner_kit
 
 def data(headers,rows,types=None):return {'columns':[{'id':x,'name':x,'type':(types or {}).get(x,'text'),'date_format':'%Y-%m-%d'} for x in headers],'rows':rows}
@@ -105,3 +107,14 @@ def test_beginner_kit_has_the_documented_candidate_counts():
     counts=defaultdict(int)
     for row in registrations:counts[row['event_code']]+=1
     assert [counts[row['event_code']] for row in feedback]==[2,2,1,3,3,1]
+
+def test_production_server_configuration(monkeypatch):
+    monkeypatch.setenv('PORT','9123');monkeypatch.setenv('FORWARDED_ALLOW_IPS','10.0.0.0/8')
+    cfg=configuration()
+    assert cfg['port']==9123 and cfg['proxy_headers'] and cfg['forwarded_allow_ips']=='10.0.0.0/8'
+
+def test_public_setup_token_guard(monkeypatch):
+    monkeypatch.setattr(main_module,'SETUP_TOKEN','private-setup-token')
+    with pytest.raises(HTTPException) as error:main_module.verify_setup_token('wrong')
+    assert error.value.status_code==403
+    main_module.verify_setup_token('private-setup-token')

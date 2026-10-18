@@ -32,6 +32,7 @@ from .lease import InstanceLease
 MultiPartParser.spool_max_size=3*1024*1024
 PH=PasswordHasher()
 SECURE=os.getenv('MOSAIC_SECURE_COOKIE','false').lower()=='true'
+SETUP_TOKEN=os.getenv('MOSAIC_SETUP_TOKEN','')
 
 @asynccontextmanager
 async def lifespan(app):
@@ -90,17 +91,28 @@ def logged_in(response):
 class Credentials(Strict):
     username: str=Field(min_length=3,max_length=64)
     password: str=Field(min_length=12,max_length=256)
+    setup_token: str | None=Field(default=None,max_length=256)
+
+def verify_setup_token(value):
+    if SETUP_TOKEN and not secrets.compare_digest(value or '',SETUP_TOKEN):
+        raise HTTPException(403,'The deployment setup token is incorrect.')
 
 @app.get('/api/health')
 def health(): return {'application':'ready','graph':'ready' if healthy() else 'unavailable','limits':{'file_bytes':MAX_BYTES,'file_rows':MAX_ROWS,'workspace_rows':MAX_WORKSPACE_ROWS,'columns':50},'model_configured':bool(os.getenv('OPENAI_API_KEY'))}
 
+@app.get('/api/ready')
+def ready():
+    value=health()
+    return value if value['graph']=='ready' else JSONResponse(value,status_code=503)
+
 @app.get('/api/auth/status')
 def auth_status():
     with db() as c: exists=c.execute('SELECT 1 FROM owner').fetchone()
-    return {'setup_required':not bool(exists)}
+    return {'setup_required':not bool(exists),'setup_token_required':bool(SETUP_TOKEN and not exists)}
 
 @app.post('/api/auth/setup')
 def setup(body:Credentials,response:Response):
+    verify_setup_token(body.setup_token)
     with MUTATION,db() as c:
         if c.execute('SELECT 1 FROM owner').fetchone(): raise HTTPException(409,'An owner already exists. Sign in.')
         c.execute('INSERT INTO owner VALUES(1,?,?)',(body.username,PH.hash(body.password)))

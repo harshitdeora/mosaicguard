@@ -132,6 +132,7 @@ function App() {
   const [ready, setReady] = useState(false),
     [auth, setAuth] = useState(false),
     [setup, setSetup] = useState(false),
+    [setupTokenRequired, setSetupTokenRequired] = useState(false),
     [error, setError] = useState(""),
     [notice, setNotice] = useState("");
   const [busy, setBusy] = useState(false),
@@ -145,7 +146,8 @@ function App() {
     [assistant, setAssistant] = useState(""),
     [showAssistant, setShowAssistant] = useState(false);
   const [username, setUsername] = useState(""),
-    [password, setPassword] = useState("");
+    [password, setPassword] = useState(""),
+    [setupToken, setSetupToken] = useState("");
   const path = (p: string) => "/w/" + wid + p;
   async function refresh() {
     const list = await api("/workspaces");
@@ -189,6 +191,7 @@ function App() {
         setHealth(h);
         const status = await api("/auth/status");
         setSetup(status.setup_required);
+        setSetupTokenRequired(status.setup_token_required);
         try {
           const me = await api("/auth/me");
           csrf = me.csrf;
@@ -317,7 +320,11 @@ function App() {
                 const r = await api(
                   "/auth/" + (setup ? "setup" : "login"),
                   "POST",
-                  { username, password },
+                  {
+                    username,
+                    password,
+                    ...(setup ? { setup_token: setupToken || null } : {}),
+                  },
                 );
                 csrf = r.csrf;
                 setAuth(true);
@@ -355,6 +362,20 @@ function App() {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </Field>
+            {setup && setupTokenRequired && (
+              <Field
+                label="Deployment setup token"
+                hint="Get this one-time setup value from the deployment owner."
+              >
+                <input
+                  type="password"
+                  value={setupToken}
+                  onChange={(e) => setSetupToken(e.target.value)}
+                  required
+                  autoComplete="one-time-code"
+                />
+              </Field>
+            )}
             {error && (
               <p role="alert" className="error">
                 {error}

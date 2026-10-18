@@ -10,6 +10,11 @@ from backend.app.graph import Graph
 from backend.app.assistant import context, request_payload, live_adapter
 from .helpers import *
 
+def test_public_health_and_readiness(client):
+    assert ok(client.get('/api/health'))['graph']=='ready'
+    assert ok(client.get('/api/ready'))['application']=='ready'
+    assert ok(client.get('/api/auth/status'))['setup_token_required'] is False
+
 def test_real_graph_oracle_union_dedup_independent_paths(client):
     c=client;w=workspace(c)
     a=imported(c,w,'code,zone\n001,X\n002,Y\n',types={})

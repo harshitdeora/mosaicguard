@@ -17,4 +17,4 @@ COPY --from=frontend /build/frontend/dist ./frontend/dist
 RUN useradd --uid 10001 --create-home mosaic && mkdir /data && chown mosaic:mosaic /data
 USER mosaic
 EXPOSE 8000
-CMD ["uvicorn","backend.app.main:app","--host","0.0.0.0","--port","8000","--no-access-log","--log-level","critical"]
+CMD ["python","-m","backend.app.serve"]

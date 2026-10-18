@@ -70,3 +70,7 @@ Browser tests use Edge on Windows. On Linux, run `npx playwright install --with-
 - [Hackathon notes and AI disclosure](docs/SUBMISSION.md)
 
 No external model credential is required. The local assistant is labelled rules-based. An optional OpenAI tool-calling adapter requires a server key, a reviewed payload policy and explicit workspace enablement. Its live execution remains unverified unless separately recorded in verification evidence.
+
+## Internet deployment
+
+The supported public-hosting path is a single-owner Railway deployment with separate app and FalkorDB services and a persistent volume for each. See the [Railway deployment guide](docs/RAILWAY_DEPLOYMENT.md). The setup token prevents another visitor from claiming a fresh public instance. The current product is not a multi-tenant service.

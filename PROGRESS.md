@@ -23,8 +23,9 @@
 - Implemented declarative repair branches, complete eligible re-audits, utility drift/retention comparisons, content-bound reproducible ZIPs, formula transport verification and local release records.
 - Added serialized durable jobs, cooperative cancellation/retry, interruption recovery, atomic metadata/result publication and deletion tombstones.
 - Added guided React UI, local rules-based guidance and optional consent-controlled read-only OpenAI adapter. Live model mode is unverified (no key configured).
-- Real graph correctness/security/recovery suite: 40 passed. Two Edge browser journeys pass, including unfamiliar semicolon CSVs, an added export, stale-result blocking, comparison, two repairs, independent package reopening, refresh, 390px layout, unauthorised request, invalid input, multiple-candidate analytical controls, explicit incomplete scope, failed repair and deletion.
+- Real graph correctness/security/recovery suite: 43 passed. Two Edge browser journeys pass, including unfamiliar semicolon CSVs, an added export, stale-result blocking, comparison, two repairs, independent package reopening, refresh, 390px layout, unauthorised request, invalid input, multiple-candidate analytical controls, explicit incomplete scope, failed repair and deletion.
 - Added a two-file beginner example, in-product import path and five-minute tutorial. Its expected 2/2/1/3/3/1 candidate counts are covered by an automated regression.
+- Added Railway-ready dynamic port/proxy startup, graph-aware readiness, protected public first-owner setup and a two-service persistent deployment guide. Actual public deployment remains separately verified.
 - Five-file benchmark: 5,000 imported records; audit 2.563s, import/audit/evaluation 5.425s, peak traced Python allocations 12,855,974 bytes. Detailed envelope and fictional candidate-pair evaluation in `docs/benchmark.json`.
 - Backup/restore smoke: passed after real graph SAVE/restart, fresh metadata/vault restore, login/evidence/ZIP digest checks and cleanup.
 - Production TypeScript/Vite build passed. Frontend dependency audit: zero vulnerabilities after Vite/esbuild updates.

@@ -14,7 +14,7 @@ No telemetry, third-party analytics, arbitrary URL ingestion, enrichment or auto
 
 `docker compose up --build -d` starts one application instance and one FalkorDB service, both with health checks and durable volumes. The app serves the built UI and API from one origin. For local development Vite proxies only `/api` to localhost 8027; no permissive CORS middleware exists.
 
-Internet hosting requires a separately reviewed TLS reverse proxy, configured `MOSAIC_HOSTS`, `MOSAIC_SECURE_COOKIE=true`, a trusted proxy-header configuration, network restrictions and backup policy. Do not expose the Vite development server or graph port publicly. No hosting deployment is part of this build.
+Internet hosting requires a reviewed TLS reverse proxy, configured `MOSAIC_HOSTS`, `MOSAIC_SECURE_COOKIE=true`, a trusted proxy-header configuration, network restrictions and backup policy. Do not expose the Vite development server or graph port publicly. The [Railway deployment guide](RAILWAY_DEPLOYMENT.md) documents the supported hosted layout. Set `MOSAIC_SETUP_TOKEN` before assigning a public domain to prevent an unknown visitor from claiming the first owner account.
 
 For updates: stop new work, back up, pull the reviewed repository revision, run `docker compose up --build -d`, check `/api/health`, and sign in to inspect existing work. Keep `.env` and durable volumes. There is no automated schema migration framework in v1; review changes before upgrading an existing store. Restore a matched application revision with its data/key/graph backup when rolling back.
 
